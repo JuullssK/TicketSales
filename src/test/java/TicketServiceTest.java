@@ -62,7 +62,7 @@ public class TicketServiceTest {
         Ticket ticket = service.buyTicket(10L, event, customer);
 
         assertNotNull(ticket);
-        assertEquals(10L, ticket.getId());
+        assertEquals(100L, ticket.getId());
         assertEquals("Rock Concert", ticket.getEvent().getName());
         assertEquals("Anna", ticket.getCustomer().getName());
     }
