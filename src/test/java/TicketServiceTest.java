@@ -1,12 +1,14 @@
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+
 import model.Customer;
 import model.Event;
 import model.Ticket;
-import org.junit.jupiter.api.Test;
 import repository.InMemoryTicketRepository;
 import repository.TicketRepository;
 import service.TicketService;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class TicketServiceTest {
 
@@ -41,7 +43,7 @@ public class TicketServiceTest {
         TicketRepository repository = new InMemoryTicketRepository();
         TicketService service = new TicketService(repository);
 
-        Event event = new Event(1L, "Concert", 2);
+        Event event = new Event(2L, "Concert", 2);
         Ticket ticket = service.buyTicket(1L, event, new Customer(1L, "Ivan"));
 
         service.cancelTicket(ticket);
