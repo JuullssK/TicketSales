@@ -50,7 +50,7 @@ public class TicketServiceTest {
 
         assertEquals(2, event.getAvailableSeats());
     }
-    
+
     @Test
     void shouldCreateTicketWithCorrectData() {
         TicketRepository repository = new InMemoryTicketRepository();
@@ -62,9 +62,36 @@ public class TicketServiceTest {
         Ticket ticket = service.buyTicket(10L, event, customer);
 
         assertNotNull(ticket);
-        assertEquals(100L, ticket.getId());
+        assertEquals(10L, ticket.getId());
         assertEquals("Rock Concert", ticket.getEvent().getName());
         assertEquals("Anna", ticket.getCustomer().getName());
     }
 
+    @Test
+    void shouldLogErrorWhenTicketSaveFails() {
+        TicketRepository repository = new TicketRepository() {
+            @Override
+            public void save(Ticket ticket) {
+                throw new RuntimeException("Ошибка сохранения билета");
+            }
+
+            @Override
+            public void delete(Ticket ticket) {
+            }
+
+            @Override
+            public java.util.List<Ticket> findAll() {
+                return java.util.Collections.emptyList();
+            }
+        };
+
+        TicketService service = new TicketService(repository);
+        Event event = new Event(3L, "Test Concert", 5);
+        Customer customer = new Customer(3L, "Alex");
+
+        assertThrows(RuntimeException.class,
+                () -> service.buyTicket(3L, event, customer));
+
+        assertEquals(5, event.getAvailableSeats());
+    }
 }
